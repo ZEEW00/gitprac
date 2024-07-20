@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is a game of finding the correct number</title>
+</head>
+<body>
+    <h1>Find the correct number!!!</h1>
+    <input id="in" type="number"> <!-- 사용자 입력을 받을 숫자 입력란 -->
+    <button id="enterBtn">Insert Data</button>
+    <div id="logs"></div> <!-- 사용자의 입력 로그 값 표시 영역 -->
+    <div id="description"></div> <!-- 정답 여부 및 힌트 표시 영역-->
+    <button style="display:none" id="restartBtn">Restart</button>
+    <!-- 초기에는 보이지 않는 재시작 버튼 -->
+    <script>
+       let targetNumber = Math.floor(Math.random() * 100); 
+       // 0부터 99까지 중 랜덤으로 생성된 숫자를 정답 숫자로 설정
+        let input = document.querySelector("#in");
+        // DOM 요소들 중 입력란 요소 선택
+        let logs = document.querySelector("#logs");
+        // 로그 영역 요소 선택
+        let enterBtn = document.querySelector("#enterBtn");
+        // 입력 버튼 요소 선택
+        let description = document.querySelector("#description");
+        // 설명 영역 요소 선택
+        let restartBtn = document.querySelector("#restartBtn");
+        // 재시작 버튼 요소 선택
+
+        // 정답 여부에 따라 설명글을 출력하는 함수
+        const getDescriptionText = (isCorrect) => {
+            if (isCorrect) {
+                return "You found the correct number!";
+            }
+            
+            const userInput = parseInt(input.value) // 사용자 입력을 정수로 변환
+
+            if (isNaN(userInput)) {
+                return "Please enter a valid number."; // 유효하지 않은 입력 처리
+            }
+            
+            if (userInput < targetNumber) {
+                return "The number is too small, please try again.";
+            }
+            if (userInput > targetNumber) {
+                return "The number is too large, please try again.";
+            }
+        };
+        
+        // 버튼과 입력을 비활성화하는 함수
+        const disableBtnAndInput = () => {
+            enterBtn.setAttribute("disabled", "");
+            // 입력 버튼 비활성화
+            input.setAttribute("disabled", "");
+            // 입력란 비활성화
+            restartBtn.style.display = "inline";
+            //재시작 버튼 표시
+        };
+        
+        // 입력한 값을 처리하는 함수
+        const processInput = () => {
+            // 로그에 사용자 입력 추가
+            logs.innerText += " " + input.value;
+
+            // 정답 여부를 확인 
+            const isCorrect = (parseInt(input.value) === targetNumber);
+
+            // 설명 텍스트 업데이트
+            description.innerText = getDescriptionText(isCorrect);
+
+            // 정답일 경우 버튼과 입력을 비활성화
+            if (isCorrect) {
+                disableBtnAndInput();
+            }
+
+            // 숫자 값 입력란 비우기
+            input.value = "";
+        };
+
+        // 버튼 클릭 시
+        enterBtn.onclick = processInput;
+
+        // 엔터키 입력 시
+        input.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                processInput();
+            }
+        });
+
+        // 재시작 버튼 클릭 시 페이지 새로고침
+        restartBtn.onclick = () => {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

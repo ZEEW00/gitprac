@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스레드 A, B, C 순차적 실행</title>
+</head>
+<body>
+    <h1>동기 & 블로킹 예제</h1>
+    <div id="output">
+        <!-- 여기에 결과를 출력할 공간 -->
+    </div>
+
+    <script>
+        // 함수 A
+        const functionA = () => {
+            return "Result from A";
+        };
+
+        // 함수 B
+        const functionB = (resultA) => {
+            return `Result from B with result: ${resultA}`;
+        };
+
+        // 함수 C
+        const functionC = (resultB) => {
+            return `Result from C with result: ${resultB}`;
+        };
+
+        // 함수 A 호출
+        const resultA = functionA();
+        appendToOutput(`Function A started.`);
+        appendToOutput(`Function B started with result: ${resultA}`);
+
+        // 함수 B 호출
+        const resultB = functionB(resultA);
+        appendToOutput(`Function C started with result: ${resultB}`);
+
+        // 함수 C 호출
+        const resultC = functionC(resultB);
+        appendToOutput(`All functions completed synchronously.`);
+
+        // 결과를 output div에 출력하는 함수
+        function appendToOutput(message) {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML += `<p>${message}</p>`;
+        }
+    </script>
+</body>
+</html>
